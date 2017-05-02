@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 namespace Blizzard.Api.Data.WoW
 {
+    // http://stackoverflow.com/a/8031283/5884242
     public class GuildNews
     {
         public GuildNewsType Type { get; set; }
