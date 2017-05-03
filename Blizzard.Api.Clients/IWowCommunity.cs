@@ -1,10 +1,11 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Blizzard.Api.Data.WoW;
 
 namespace Blizzard.Api.Clients
 {
-    public interface IWowCommunity
+    public interface IWowCommunity : IDisposable
     {
         Task<Achievement> GetAchievementAsync(int id);
         Task<Character> GetCharacterProfileAsync(string realm, string characterName, params string[] fields);

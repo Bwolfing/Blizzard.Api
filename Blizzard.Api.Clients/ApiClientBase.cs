@@ -42,7 +42,13 @@ namespace Blizzard.Api.Clients
             queryStringParams.Add("apikey", _apiKey);
             queryStringParams.Add("locale", _locale.ToString());
 
-            return GetAsync(requestUri + queryStringParams.ToQueryString());
+            string requestUriWithQueryString = $"{requestUri}?{queryStringParams.ToQueryString()}";
+            if (!string.IsNullOrWhiteSpace(RequestUriPrefix))
+            {
+                requestUriWithQueryString = $"{RequestUriPrefix}/{requestUriWithQueryString}";
+            }
+
+            return GetAsync(requestUriWithQueryString);
         }
 
         protected async Task<T> ConvertResponseToObject<T>(HttpResponseMessage response)

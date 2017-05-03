@@ -9,6 +9,8 @@ namespace Blizzard.Api.Clients
 {
     public class OAuth : ApiClientBase, IOAuth
     {
+        protected override string RequestUriPrefix => null;
+
         public OAuth(Region region, Locale locale, string apiKey) : base(region, locale, apiKey)
         {
         }
