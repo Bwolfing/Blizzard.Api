@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Threading.Tasks;
 using Blizzard.Api.Data.Core;
 using Blizzard.Api.Data.WoW;

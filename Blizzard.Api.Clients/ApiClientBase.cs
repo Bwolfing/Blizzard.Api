@@ -13,8 +13,7 @@ namespace Blizzard.Api.Clients
     {
         private const string BaseAddressMissingRegion = "https://{0}.api.battle.net/";
 
-        // TODO: Use JsonSerializerSettings.ContractResolver to handle
-        // property name casing resolution; http://www.newtonsoft.com/json/help/html/NamingStrategyCamelCase.htm
+        protected abstract string RequestUriPrefix { get; }
 
         private string ApiBaseAddress => string.Format(BaseAddressMissingRegion, _region.ToString().ToLower());
         private readonly string _apiKey;
@@ -33,19 +32,17 @@ namespace Blizzard.Api.Clients
             DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
-        protected Task<string> GetStringWithReponseValidationAsync(string requestUri)
+        protected Task<HttpResponseMessage> GetWithApiKeyAndLocaleAsync(string requestUri)
         {
-            return GetStringWithReponseValidationAsync(requestUri, new NameValueCollection());
+            return GetWithApiKeyAndLocaleAsync(requestUri, new NameValueCollection());
         }
 
-        protected async Task<string> GetStringWithReponseValidationAsync(string requestUri, NameValueCollection queryStringParams)
+        protected Task<HttpResponseMessage> GetWithApiKeyAndLocaleAsync(string requestUri, NameValueCollection queryStringParams)
         {
             queryStringParams.Add("apikey", _apiKey);
             queryStringParams.Add("locale", _locale.ToString());
 
-            var response = await GetAsync(requestUri + queryStringParams.ToQueryString());
-
-            return string.Empty;
+            return GetAsync(requestUri + queryStringParams.ToQueryString());
         }
 
         protected async Task<T> ConvertResponseToObject<T>(HttpResponseMessage response)
