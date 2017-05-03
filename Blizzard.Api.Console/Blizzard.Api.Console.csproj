@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp1.1</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Blizzard.Api.Clients\Blizzard.Api.Clients.csproj">
+      <Project>{8c27ed01-ac82-4c45-8929-f81490046a53}</Project>
+      <Name>Blizzard.Api.Clients</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Blizzard.Api.Data\Blizzard.Api.Data.csproj">
+      <Project>{1820799f-7322-4f11-9291-41d11643e45b}</Project>
+      <Name>Blizzard.Api.Data</Name>
+    </ProjectReference>
+  </ItemGroup>
+</Project>

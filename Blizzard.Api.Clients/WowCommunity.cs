@@ -19,14 +19,14 @@ namespace Blizzard.Api.Clients
 
         public async Task<Achievement> GetAchievementAsync(int id)
         {
-            var response = await GetWithApiKeyAndLocaleAsync($"achievement/{id}");
+            var response = await GetWithApiKeyAndLocaleAsync($"achievement/{id}").ConfigureAwait(false);
 
             if (!response.IsSuccessStatusCode)
             {
                 throw new NotImplementedException();
             }
 
-            return await ConvertResponseToObject<Achievement>(response);
+            return await ConvertResponseToObject<Achievement>(response).ConfigureAwait(false);
         }
 
         public async Task<Character> GetCharacterProfileAsync(string realm, string characterName, params string[] fields)
