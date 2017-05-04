@@ -14,9 +14,10 @@ namespace Blizzard.Api.Clients
         private const string BaseAddressMissingRegion = "https://{0}.api.battle.net/";
 
         protected abstract string RequestUriPrefix { get; }
+        protected string ApiKey { get; }
+
 
         private string ApiBaseAddress => string.Format(BaseAddressMissingRegion, _region.ToString().ToLower());
-        private readonly string _apiKey;
         private readonly Region _region;
         private readonly Locale _locale;
 
@@ -24,7 +25,7 @@ namespace Blizzard.Api.Clients
         {
             _region = region;
             _locale = locale;
-            _apiKey = apiKey;
+            ApiKey = apiKey;
 
             BaseAddress = new Uri(ApiBaseAddress);
 
@@ -39,7 +40,7 @@ namespace Blizzard.Api.Clients
 
         protected Task<HttpResponseMessage> GetWithApiKeyAndLocaleAsync(string requestUri, NameValueCollection queryStringParams)
         {
-            queryStringParams.Add("apikey", _apiKey);
+            queryStringParams.Add("apikey", ApiKey);
             queryStringParams.Add("locale", _locale.ToString());
 
             string requestUriWithQueryString = $"{requestUri}?{queryStringParams.ToQueryString()}";

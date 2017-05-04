@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Net.Http;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
+using Blizzard.Api.Clients.Exceptions;
 using Blizzard.Api.Data.Core;
 using Blizzard.Api.Data.WoW;
 
@@ -21,12 +23,21 @@ namespace Blizzard.Api.Clients
         {
             var response = await GetWithApiKeyAndLocaleAsync($"achievement/{id}").ConfigureAwait(false);
 
-            if (!response.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode)
             {
-                throw new NotImplementedException();
+                return await ConvertResponseToObject<Achievement>(response).ConfigureAwait(false);
             }
 
-            return await ConvertResponseToObject<Achievement>(response).ConfigureAwait(false);
+            switch (response.StatusCode)
+            {
+                case HttpStatusCode.NotFound:
+                    throw new KeyNotFoundException($"Could not find an achievement with id '{id}'");
+                case HttpStatusCode.Forbidden:
+                    throw new InvalidApiKeyException(ApiKey);
+                default:
+                    response.EnsureSuccessStatusCode(); // throws an exception since it failed
+                    return null; // EnsureSuccessStatus code doesn't "guarantee a throw, need a return
+            }
         }
 
         public async Task<Character> GetCharacterProfileAsync(string realm, string characterName, params string[] fields)
