@@ -47,7 +47,28 @@ namespace Blizzard.Api.Clients
 
             EnsureResponseIsSuccess(response);
 
-            return await ConvertResponseToObject<T>(response);
+            return response;
+        }
+
+        protected Task<T> ConvertResponseTo<T>(HttpResponseMessage response)
+        {
+            return ConvertResponseTo<T>(response, null);
+        }
+
+        protected async Task<T> ConvertResponseTo<T>(HttpResponseMessage response, JsonConverter objectConverter)
+        {
+            string jsonStr = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+            var serializerSettings = new JsonSerializerSettings
+            {
+                ContractResolver = new CamelCasePropertyNamesContractResolver(),
+            };
+            if (objectConverter != null)
+            {
+                serializerSettings.Converters.Add(objectConverter);
+            }
+
+            return JsonConvert.DeserializeObject<T>(jsonStr, serializerSettings);
         }
 
         private string RequestUriWithQueryString(string requestUri, NameValueCollection queryStringParams)
@@ -74,15 +95,6 @@ namespace Blizzard.Api.Clients
                 throw new KeyNotFoundException();
             }
             response.EnsureSuccessStatusCode();
-        }
-
-        protected async Task<T> ConvertResponseToObject<T>(HttpResponseMessage response)
-        {
-            string jsonStr = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-            return JsonConvert.DeserializeObject<T>(jsonStr, new JsonSerializerSettings
-            {
-                ContractResolver = new CamelCasePropertyNamesContractResolver(),
-            });
         }
     }
 }

@@ -22,7 +22,7 @@ namespace Blizzard.Api.Clients
             try
             {
                 var response = await GetWithApiKeyAndLocaleAsync($"achievement/{id}").ConfigureAwait(false);
-                return await ConvertResponseToObject<Achievement>(response);
+                return await ConvertResponseTo<Achievement>(response);
             }
             catch (KeyNotFoundException)
             {
@@ -37,7 +37,7 @@ namespace Blizzard.Api.Clients
             try
             {
                 var response = await GetWithApiKeyAndLocaleAsync($"character/{realm}/{characterName}", queryParams).ConfigureAwait(false);
-                return await ConvertResponseToObject<Character>(response);
+                return await ConvertResponseTo<Character>(response);
             }
             catch (KeyNotFoundException)
             {
@@ -50,9 +50,17 @@ namespace Blizzard.Api.Clients
             throw new System.NotImplementedException();
         }
 
-        public Task<Item> GetItemAsync(int id)
+        public async Task<Item> GetItemAsync(int id)
         {
-            throw new System.NotImplementedException();
+            try
+            {
+                var response = await GetWithApiKeyAndLocaleAsync($"item/{id}").ConfigureAwait(false);
+                return await ConvertResponseTo<Item>(response);
+            }
+            catch (KeyNotFoundException)
+            {
+                throw new KeyNotFoundException($"Could not find an item with id '{id}'");
+            }
         }
 
         public Task<List<RaceDataResource>> GetCharacterRacesAsync()

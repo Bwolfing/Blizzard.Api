@@ -1,9 +1,5 @@
-﻿using System;
+﻿using Blizzard.Api.Data.WoW.Enums;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Blizzard.Api.Data.WoW.Enums;
 
 namespace Blizzard.Api.Data.WoW
 {
