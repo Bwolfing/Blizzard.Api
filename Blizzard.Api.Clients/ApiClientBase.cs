@@ -2,6 +2,7 @@ using Blizzard.Api.Data.Core;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Net;
 using System.Net.Http;
@@ -42,6 +43,15 @@ namespace Blizzard.Api.Clients
 
         protected async Task<HttpResponseMessage> GetWithApiKeyAndLocaleAsync(string requestUri, NameValueCollection queryStringParams)
         {
+            var response = await GetAsync(RequestUriWithQueryString(requestUri, queryStringParams));
+
+            EnsureResponseIsSuccess(response);
+
+            return await ConvertResponseToObject<T>(response);
+        }
+
+        private string RequestUriWithQueryString(string requestUri, NameValueCollection queryStringParams)
+        {
             queryStringParams.Add("apikey", _apiKey);
             queryStringParams.Add("locale", _locale.ToString());
 
@@ -50,15 +60,20 @@ namespace Blizzard.Api.Clients
             {
                 requestUriWithQueryString = $"{RequestUriPrefix}/{requestUriWithQueryString}";
             }
+            return requestUriWithQueryString;
+        }
 
-            var response = await GetAsync(requestUriWithQueryString);
-
+        private void EnsureResponseIsSuccess(HttpResponseMessage response)
+        {
             if (response.StatusCode == HttpStatusCode.Forbidden)
             {
                 throw new InvalidApiKeyException(_apiKey);
             }
-
-            return response;
+            if (response.StatusCode == HttpStatusCode.NotFound)
+            {
+                throw new KeyNotFoundException();
+            }
+            response.EnsureSuccessStatusCode();
         }
 
         protected async Task<T> ConvertResponseToObject<T>(HttpResponseMessage response)

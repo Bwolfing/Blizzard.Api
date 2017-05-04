@@ -21,20 +21,14 @@ namespace Blizzard.Api.Clients
 
         public async Task<Achievement> GetAchievementAsync(int id)
         {
-            var response = await GetWithApiKeyAndLocaleAsync($"achievement/{id}").ConfigureAwait(false);
-
-            if (response.IsSuccessStatusCode)
+            try
             {
-                return await ConvertResponseToObject<Achievement>(response).ConfigureAwait(false);
+                var response = await GetWithApiKeyAndLocaleAsync($"achievement/{id}").ConfigureAwait(false);
+                return await ConvertResponseToObject<Achievement>(response);
             }
-
-            switch (response.StatusCode)
+            catch (KeyNotFoundException)
             {
-                case HttpStatusCode.NotFound:
-                    throw new KeyNotFoundException($"Could not find an achievement with id '{id}'");
-                default:
-                    response.EnsureSuccessStatusCode(); // throws an exception since it failed
-                    return null; // EnsureSuccessStatus code doesn't "guarantee" a throw, need a return
+                throw new KeyNotFoundException($"Could not find an achievement with id '{id}'");
             }
         }
 
@@ -45,21 +39,15 @@ namespace Blizzard.Api.Clients
             {
                 queryParams.Add("fields", string.Join(",", fields));
             }
-            var response = await GetWithApiKeyAndLocaleAsync($"character/{realm}/{characterName}", queryParams)
-                .ConfigureAwait(false);
 
-            if (response.IsSuccessStatusCode)
+            try
             {
+                var response = await GetWithApiKeyAndLocaleAsync($"character/{realm}/{characterName}", queryParams).ConfigureAwait(false);
                 return await ConvertResponseToObject<Character>(response);
             }
-
-            switch (response.StatusCode)
+            catch (KeyNotFoundException)
             {
-                case HttpStatusCode.NotFound:
-                    throw new KeyNotFoundException($"Could not find a character named '{characterName}' on realm '{realm}'");
-                default:
-                    response.EnsureSuccessStatusCode();
-                    return null;
+                throw new KeyNotFoundException($"Could not find a character named '{characterName}' on realm '{realm}'");
             }
         }
 
