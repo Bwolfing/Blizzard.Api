@@ -32,11 +32,9 @@ namespace Blizzard.Api.Clients
             {
                 case HttpStatusCode.NotFound:
                     throw new KeyNotFoundException($"Could not find an achievement with id '{id}'");
-                case HttpStatusCode.Forbidden:
-                    throw new InvalidApiKeyException(ApiKey);
                 default:
                     response.EnsureSuccessStatusCode(); // throws an exception since it failed
-                    return null; // EnsureSuccessStatus code doesn't "guarantee a throw, need a return
+                    return null; // EnsureSuccessStatus code doesn't "guarantee" a throw, need a return
             }
         }
 
@@ -45,20 +43,24 @@ namespace Blizzard.Api.Clients
             var queryParams = new NameValueCollection();
             if (fields != null && fields.Length > 0)
             {
-                foreach (string characterField in fields)
-                {
-                    queryParams.Add("fields", characterField);
-                }
+                queryParams.Add("fields", string.Join(",", fields));
             }
             var response = await GetWithApiKeyAndLocaleAsync($"character/{realm}/{characterName}", queryParams)
                 .ConfigureAwait(false);
 
-            if (!response.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode)
             {
-                throw new NotImplementedException();
+                return await ConvertResponseToObject<Character>(response);
             }
 
-            return await ConvertResponseToObject<Character>(response);
+            switch (response.StatusCode)
+            {
+                case HttpStatusCode.NotFound:
+                    throw new KeyNotFoundException($"Could not find a character named '{characterName}' on realm '{realm}'");
+                default:
+                    response.EnsureSuccessStatusCode();
+                    return null;
+            }
         }
 
         public Task<Guild> GetGuildProfileAsync(string realm, string guildName, params string[] fields)

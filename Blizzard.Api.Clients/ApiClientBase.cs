@@ -3,9 +3,11 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Specialized;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using Blizzard.Api.Clients.Exceptions;
 
 namespace Blizzard.Api.Clients
 {
@@ -14,10 +16,10 @@ namespace Blizzard.Api.Clients
         private const string BaseAddressMissingRegion = "https://{0}.api.battle.net/";
 
         protected abstract string RequestUriPrefix { get; }
-        protected string ApiKey { get; }
 
 
         private string ApiBaseAddress => string.Format(BaseAddressMissingRegion, _region.ToString().ToLower());
+        private readonly string _apiKey;
         private readonly Region _region;
         private readonly Locale _locale;
 
@@ -25,7 +27,7 @@ namespace Blizzard.Api.Clients
         {
             _region = region;
             _locale = locale;
-            ApiKey = apiKey;
+            _apiKey = apiKey;
 
             BaseAddress = new Uri(ApiBaseAddress);
 
@@ -38,9 +40,9 @@ namespace Blizzard.Api.Clients
             return GetWithApiKeyAndLocaleAsync(requestUri, new NameValueCollection());
         }
 
-        protected Task<HttpResponseMessage> GetWithApiKeyAndLocaleAsync(string requestUri, NameValueCollection queryStringParams)
+        protected async Task<HttpResponseMessage> GetWithApiKeyAndLocaleAsync(string requestUri, NameValueCollection queryStringParams)
         {
-            queryStringParams.Add("apikey", ApiKey);
+            queryStringParams.Add("apikey", _apiKey);
             queryStringParams.Add("locale", _locale.ToString());
 
             string requestUriWithQueryString = $"{requestUri}?{queryStringParams.ToQueryString()}";
@@ -49,7 +51,14 @@ namespace Blizzard.Api.Clients
                 requestUriWithQueryString = $"{RequestUriPrefix}/{requestUriWithQueryString}";
             }
 
-            return GetAsync(requestUriWithQueryString);
+            var response = await GetAsync(requestUriWithQueryString);
+
+            if (response.StatusCode == HttpStatusCode.Forbidden)
+            {
+                throw new InvalidApiKeyException(_apiKey);
+            }
+
+            return response;
         }
 
         protected async Task<T> ConvertResponseToObject<T>(HttpResponseMessage response)
