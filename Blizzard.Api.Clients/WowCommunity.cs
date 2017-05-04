@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Net.Http;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
-using Blizzard.Api.Clients.Exceptions;
+﻿using Blizzard.Api.Clients.Enums;
 using Blizzard.Api.Data.Core;
 using Blizzard.Api.Data.WoW;
+using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Blizzard.Api.Clients
 {
@@ -32,13 +30,9 @@ namespace Blizzard.Api.Clients
             }
         }
 
-        public async Task<Character> GetCharacterProfileAsync(string realm, string characterName, params string[] fields)
+        public async Task<Character> GetCharacterProfileAsync(string realm, string characterName, params CharacterFields[] fields)
         {
-            var queryParams = new NameValueCollection();
-            if (fields != null && fields.Length > 0)
-            {
-                queryParams.Add("fields", string.Join(",", fields));
-            }
+            var queryParams = SetFieldsQueryStringParam(fields);
 
             try
             {
@@ -74,6 +68,31 @@ namespace Blizzard.Api.Clients
         public Task<List<RealmStatus>> GetRealmStatusesAsync(params string[] realms)
         {
             throw new System.NotImplementedException();
+        }
+
+        private NameValueCollection SetFieldsQueryStringParam(CharacterFields[] fields)
+        {
+            var queryParams = new NameValueCollection();
+            if (fields != null && fields.Length > 0)
+            {
+                if (fields.Contains(CharacterFields.All))
+                {
+                    queryParams.Add("fields",
+                        string.Join(",",
+                            Enum.GetNames(typeof(CharacterFields))
+                                .Where(f => f != CharacterFields.All.ToString())
+                                .Select(f => f.ToLower())
+                        )
+                    );
+                }
+                else
+                {
+                    queryParams.Add("fields",
+                        string.Join(",", fields.Select(f => f.ToString().ToLower()))
+                    );
+                }
+            }
+            return queryParams;
         }
     }
 }
