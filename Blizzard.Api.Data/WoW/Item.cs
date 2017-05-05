@@ -23,9 +23,9 @@ namespace Blizzard.Api.Data.WoW
 
         public GoldValue BuyPrice { get; set; }
 
-        public ItemClass ItemClass { get; set; }
+        public int ItemClassId { get; set; }
 
-        public ItemSubClass ItemSubClass { get; set; }
+        public int ItemSubClassId { get; set; }
 
         public int ContainerSlots { get; set; }
 
@@ -52,6 +52,8 @@ namespace Blizzard.Api.Data.WoW
         public int RequiredLevel { get; set; }
 
         public int RequiredSkillRank { get; set; }
+
+        public SocketInfo SocketInfo { get; set; }
 
         public ItemSource ItemSource { get; set; }
 

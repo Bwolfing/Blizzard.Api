@@ -1,6 +1,7 @@
 ﻿using System;
 using Blizzard.Api.Data.WoW;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Blizzard.Api.Data.Json
 {
