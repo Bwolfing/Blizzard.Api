@@ -25,7 +25,7 @@ namespace Blizzard.Api.Clients
                 throw new Exception("Failed to retrieve characters");
             }
 
-            return await ConvertResponseToObject<IEnumerable<Character>>(response);
+            return await ConvertResponseTo<IEnumerable<Character>>(response);
         }
     }
 }

@@ -3,7 +3,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Reflection;
 
-namespace Blizzard.Api.Clients.Json
+namespace Blizzard.Api.Data.Json
 {
     public abstract class JsonCustomConverter<T> : JsonConverter
         where T : class

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Blizzard.Api.Data.Core;
 using Blizzard.Api.Data.WoW;
+using Newtonsoft.Json;
 
 namespace Blizzard.Api.Console
 {
@@ -11,6 +12,8 @@ namespace Blizzard.Api.Console
     {
         public static void Main(string[] args)
         {
+            GoldValue g = JsonConvert.DeserializeObject<GoldValue>("150");
+            System.Console.WriteLine($"{g.ValueInCopper} {g.ValueInSilver} {g.ValueInGold}");
             Task.Run(async () => await GetAchievement(2144).ConfigureAwait(true)).Wait();
         }
 
