@@ -8,7 +8,7 @@ namespace Blizzard.Api.Data.WoW
     {
         public string Name { get; set; }
 
-        public RealmStatus Realm { get; set; }
+        public string Realm { get; set; }
 
         public int Level { get; set; }
 

@@ -2,10 +2,10 @@
 {
     public class Talent
     {
-        public TalentGridCoordinates TalentGridCoorindates { get; set; }
+        public int Tier { get; set; }
+
+        public int Column { get; set; }
 
         public Spell Spell { get; set; }
-
-        public Specialization SpecTalentBelongsTo { get; set; }
     }
 }

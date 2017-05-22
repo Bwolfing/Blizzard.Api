@@ -1,6 +1,7 @@
 using Blizzard.Api.Data.WoW.Enums;
 using System.Collections.Generic;
 using System.Runtime.InteropServices.ComTypes;
+using Blizzard.Api.Data.Internal.WoW;
 using Newtonsoft.Json;
 
 namespace Blizzard.Api.Data.WoW
@@ -17,9 +18,7 @@ namespace Blizzard.Api.Data.WoW
 
         public Gender Gender { get; set; }
         
-        // TODO: Replace with Get-only, which determines based on race
-        [JsonIgnore]
-        public Faction Faction { get; set; }
+        public Faction Faction => Convert.FromRace(Race);
 
         public int Level { get; set; }
 
@@ -29,7 +28,7 @@ namespace Blizzard.Api.Data.WoW
 
         public int TotalHonorableKills { get; set; }
 
-        public Guild Guild { get; set; }
+        public CharacterGuild Guild { get; set; }
 
         [JsonProperty("spec")]
         public Specialization Specialization { get; set; }
@@ -39,5 +38,7 @@ namespace Blizzard.Api.Data.WoW
         public Stats Stats { get; set; }
 
         public CharacterEquipment Items { get; set; }
+
+        public IList<Specialization> Talents { get; set; }
     }
 }

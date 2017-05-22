@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Newtonsoft.Json;
 
 namespace Blizzard.Api.Data.WoW
 {
@@ -23,5 +19,8 @@ namespace Blizzard.Api.Data.WoW
         public string CoolDown { get; set; }
 
         public string PowerCost { get; set; }
+
+        [JsonProperty("spec")]
+        public SpecializationDescription Specialization { get; set; }
     }
 }
