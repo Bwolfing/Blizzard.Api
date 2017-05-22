@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 
 namespace Blizzard.Api.Data.WoW
 {
-    public class Character
+    public class Character : ICharacter
     {
         public string Name { get; set; }
 
@@ -17,7 +17,7 @@ namespace Blizzard.Api.Data.WoW
         public Race Race { get; set; }
 
         public Gender Gender { get; set; }
-        
+
         public Faction Faction => Convert.FromRace(Race);
 
         public int Level { get; set; }
@@ -25,6 +25,8 @@ namespace Blizzard.Api.Data.WoW
         public string Thumbnail { get; set; }
 
         public int AchievementPoints { get; set; }
+
+        public string BattleGroup { get; set; }
 
         public int TotalHonorableKills { get; set; }
 

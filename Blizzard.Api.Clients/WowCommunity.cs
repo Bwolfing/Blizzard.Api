@@ -46,9 +46,19 @@ namespace Blizzard.Api.Clients
             }
         }
 
-        public Task<Guild> GetGuildProfileAsync(string realm, string guildName, params string[] fields)
+        public async Task<Guild> GetGuildProfileAsync(string realm, string guildName, params string[] fields)
         {
-            throw new System.NotImplementedException();
+            var queryParams = SetFieldsQueryStringParam(fields);
+
+            try
+            {
+                var response = await GetWithApiKeyAndLocaleAsync($"guild/{realm}/{guildName}", queryParams).ConfigureAwait(false);
+                return await ConvertResponseTo<Guild>(response);
+            }
+            catch (KeyNotFoundException e)
+            {
+                throw new KeyNotFoundException($"Could not find a guild named '{guildName}' on realm '{realm}'");
+            }
         }
 
         public async Task<Item> GetItemAsync(int id)
@@ -80,6 +90,14 @@ namespace Blizzard.Api.Clients
             throw new System.NotImplementedException();
         }
 
+        private NameValueCollection SetFieldsQueryStringParam(string[] fields)
+        {
+            var queryParams = new NameValueCollection();
+
+            queryParams.Add("fields", string.Join(",", fields));
+
+            return queryParams;
+        }
         private NameValueCollection SetFieldsQueryStringParam(CharacterFields[] fields)
         {
             var queryParams = new NameValueCollection();

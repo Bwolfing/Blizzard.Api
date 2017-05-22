@@ -1,6 +1,6 @@
 ﻿namespace Blizzard.Api.Data.WoW
 {
-    public class CharacterGuild
+    public class CharacterGuild : IGuild
     {
         public string Name { get; set; }
 

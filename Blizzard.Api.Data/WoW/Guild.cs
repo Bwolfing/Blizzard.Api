@@ -4,11 +4,13 @@ using Newtonsoft.Json;
 
 namespace Blizzard.Api.Data.WoW
 {
-    public class Guild
+    public class Guild : IGuild
     {
         public string Name { get; set; }
 
         public string Realm { get; set; }
+
+        public string BattleGroup { get; set; }
 
         public int Level { get; set; }
 
@@ -19,7 +21,7 @@ namespace Blizzard.Api.Data.WoW
 
         public GuildEmblem Emblem { get; set; }
 
-        public List<Character> Members { get; set; }
+        public List<GuildMember> Members { get; set; }
 
         public List<GuildNews> News { get; set; }
     }
