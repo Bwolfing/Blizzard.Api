@@ -88,5 +88,55 @@ namespace Blizzard.Api.Data.WoW
         public int DisenchantingSkillRank { get; set; }
 
         public int ArtifactId { get; set; }
+
+        public Item()
+        {
+        }
+
+        internal Item(Internal.WoW.Item item)
+        {
+            Id = item.Id;
+            Description = item.Description;
+            Name = item.Name;
+            Icon = item.Icon;
+            Stackable = item.Stackable;
+            ItemBind = item.ItemBind;
+            BonusStats = item.BonusStats;
+            ItemSpells = item.ItemSpells;
+            BuyPrice = new GoldValue(item.BuyPrice);
+            ItemClassId = item.ItemClassId;
+            ItemSubClassId = item.ItemSubClassId;
+            ContainerSlots = item.ContainerSlots;
+            InventoryType = item.InventoryType;
+            Equippable = item.Equippable;
+            ItemLevel = item.ItemLevel;
+            MaxCount = item.MaxCount;
+            MaxDurability = item.MaxDurability;
+            MinFactionId = item.MinFactionId;
+            MinRepuration = item.MinRepuration;
+            Quality = item.Quality;
+            SellPrice = new GoldValue(item.SellPrice);
+            RequiredSkill = item.RequiredSkill;
+            RequiredLevel = item.RequiredLevel;
+            RequiredSkillRank = item.RequiredSkillRank;
+            SocketInfo = item.SocketInfo;
+            ItemSource = item.ItemSource;
+            BaseArmor = item.BaseArmor;
+            HasSockets = item.HasSockets;
+            IsAuctionable = item.IsAuctionable;
+            Armor = item.Armor;
+            DisplayInfoId = item.DisplayInfoId;
+            NameDescription = item.NameDescription;
+            NameDescriptionColor = item.NameDescriptionColor;
+            Upgradable = item.Upgradable;
+            HeroicTooltip = item.HeroicTooltip;
+            Context = item.Context;
+            BonusLists = item.BonusLists;
+            AvailableContexts = item.AvailableContexts;
+            BonusSummary = item.BonusSummary;
+            TooltipParams = item.TooltipParams;
+            DisenchantingSkillRank = item.DisenchantingSkillRank;
+            ArtifactId = item.ArtifactId;
+        }
     }
 }

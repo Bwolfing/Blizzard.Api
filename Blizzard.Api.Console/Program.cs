@@ -12,8 +12,6 @@ namespace Blizzard.Api.Console
 
         public static void Main(string[] args)
         {
-            GoldValue g = JsonConvert.DeserializeObject<GoldValue>("150");
-            System.Console.WriteLine($"{g.ValueInCopper} {g.ValueInSilver} {g.ValueInGold}");
             Task.Run(async () => await GetAchievement(2144).ConfigureAwait(true)).Wait();
             Task.Run(async () => await GetItem(128943).ConfigureAwait(true)).Wait();
         }

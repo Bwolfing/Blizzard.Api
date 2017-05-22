@@ -1,9 +1,5 @@
-﻿using Blizzard.Api.Data.Json;
-using Newtonsoft.Json;
-
-namespace Blizzard.Api.Data.WoW
+﻿namespace Blizzard.Api.Data.WoW
 {
-    [JsonConverter(typeof(GoldValueConverter))]
     public class GoldValue
     {
         private const double CopperInSilver = 100;
@@ -15,5 +11,13 @@ namespace Blizzard.Api.Data.WoW
 
         public double ValueInGold => ValueInSilver / SilverInGold;
 
+        public GoldValue()
+        {
+        }
+
+        public GoldValue(double copper)
+        {
+            ValueInCopper = copper;
+        }
     }
 }

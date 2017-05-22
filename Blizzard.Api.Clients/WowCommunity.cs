@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Threading.Tasks;
+using Internal = Blizzard.Api.Data.Internal.WoW;
 
 namespace Blizzard.Api.Clients
 {
@@ -55,7 +56,8 @@ namespace Blizzard.Api.Clients
             try
             {
                 var response = await GetWithApiKeyAndLocaleAsync($"item/{id}").ConfigureAwait(false);
-                return await ConvertResponseTo<Item>(response);
+                var internalItem = await ConvertResponseTo<Internal.Item>(response);
+                return new Item(internalItem);
             }
             catch (KeyNotFoundException)
             {
